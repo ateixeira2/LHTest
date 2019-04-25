@@ -49,6 +49,10 @@ run eslint --fix in src
 
 use [commitizen](https://github.com/commitizen/cz-cli) for edit commit message
 
+## npm run storybook
+
+run server storybook
+
 ## Learn More
 
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
