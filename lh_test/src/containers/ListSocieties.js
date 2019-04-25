@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { fetchListSocietiesRequested } from '../actions/listSocieties';
+import Default from '../components/molecules/ListElements/Default';
 
 class ListSocieties extends React.PureComponent {
   componentDidMount() {
@@ -9,8 +10,33 @@ class ListSocieties extends React.PureComponent {
     fetchListSocieties();
   }
 
+  renderList = (data) => {
+    if (data.fetching) {
+      return (<span>Chargement ...</span>);
+    } if (data.error) {
+      return (<span>Error</span>);
+    } if (data.fetched) {
+      return data.payload.map(e => (
+        <Default
+          key={e.id}
+          img={e.logo}
+          title={e.name}
+          subTitle={`${e.address} ${e.zipcode} ${e.city}}`}
+          content={`Up to ${e.maxoffer} ${e.currency} offered}`}
+        />
+      ));
+    }
+    return (<span>Oups</span>);
+  }
+
   render() {
-    return (<span>List Societies</span>);
+    const { listSocieties } = this.props;
+    return (
+      <div>
+        <span>List Societies</span>
+        {this.renderList(listSocieties)}
+      </div>
+    );
   }
 }
 
@@ -22,10 +48,15 @@ const mapDispatchToProps = dispatch => ({
   fetchListSocieties: () => dispatch(fetchListSocietiesRequested())
 });
 
-ListSocieties.defaultProps = {};
+ListSocieties.defaultProps = {
+  listSocieties: []
+};
 
 ListSocieties.propTypes = {
-  fetchListSocieties: PropTypes.func.isRequired
+  fetchListSocieties: PropTypes.func.isRequired,
+  listSocieties: PropTypes.arrayOf(
+    PropTypes.shape({})
+  )
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ListSocieties);
